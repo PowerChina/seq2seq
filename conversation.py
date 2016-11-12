@@ -20,8 +20,8 @@ from keras.layers import RepeatVector,TimeDistributed,Dense
 
 CORPUS_FILE_PATH = "./data/vectors.bin.skipgram.mergenew.2.3"
 DATA_SET_PATH = "./data/data.txt"
-TRAIN_SET_PATH = "./data/train.txt"
-TEST_SET_PATH = "./data/test.txt"
+TRAIN_SET_PATH = "./data/train/train.txt"
+TEST_SET_PATH = "./data/test/test.txt"
 TOKEN_REPRESENTATION_SIZE = 300
 INPUT_SEQUENCE_LENGTH = 20
 ANSWER_MAX_TOKEN_LENGTH = 16
