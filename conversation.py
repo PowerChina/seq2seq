@@ -18,22 +18,8 @@ from seq2seq.models import AttentionSeq2seq,SimpleSeq2seq
 from seq2seq.layers.decoders import AttentionDecoder
 from keras.layers import RepeatVector,TimeDistributed,Dense
 
-CORPUS_FILE_PATH = "./data/vectors.bin.skipgram.mergenew.2.3"
-DATA_SET_PATH = "./data/data.txt"
-TRAIN_SET_PATH = "./data/train/train.txt"
-TEST_SET_PATH = "./data/test/test.txt"
-TOKEN_REPRESENTATION_SIZE = 300
-INPUT_SEQUENCE_LENGTH = 20
-ANSWER_MAX_TOKEN_LENGTH = 16
-VOCAB_MAX_SIZE = 20000
-HIDDEN_LAYER_DIMENSION = 512
-FULL_LEARN_ITER_NUM = 500
-SAMPLES_BATCH_SIZE = 100
-EOS_SYMBOL = '$$$'
-EMPTY_SYMBOL= '###'
-TRAIN_BATCH_SIZE = 20 
-NN_MODEL_PATH = './model/model'
-
+from config import *
+from model import *
 '''
     preprocess for sentences
 
@@ -131,51 +117,6 @@ def get_processed_sentence_and_index_to_token(corpus_path,processed_corpus_path=
     processed_sentences, index_to_token = process_corpus(corpus_path)
     print 'end'
     return processed_sentences,index_to_token
-
-'''
-    get nn model
-
-'''
-def get_nn_model(token_dict_size):
-
-    '''model = Sequential()
-    seq2seq = AttentionSeq2seq(
-    #seq2seq = SimpleSeq2seq(
-        input_dim = TOKEN_REPRESENTATION_SIZE,
-        input_length = INPUT_SEQUENCE_LENGTH,
-        hidden_dim = HIDDEN_LAYER_DIMENSION,
-        output_dim = token_dict_size,
-        output_length = ANSWER_MAX_TOKEN_LENGTH,
-        depth = 4
-    )
-    model.add(seq2seq)
-    model.compile(loss='categorical_crossentropy',optimizer='rmsprop',metrics=['accuracy'])
-    '''
-    dropout = 0.1 
-    model = Sequential()
-    encoder_top_layer = LSTM(HIDDEN_LAYER_DIMENSION,input_dim=TOKEN_REPRESENTATION_SIZE,input_length=INPUT_SEQUENCE_LENGTH,return_sequences=True)
-
-    decoder_top_layer = AttentionDecoder(hidden_dim=HIDDEN_LAYER_DIMENSION,output_dim=HIDDEN_LAYER_DIMENSION,output_length=ANSWER_MAX_TOKEN_LENGTH,state_input=False,return_sequences=True)
-    #model.add(Embedding(input_dim=TOKEN_REPRESENTATION_SIZE,output_dim=HIDDEN_LAYER_DIMENSION,input_length=INPUT_SEQUENCE_LENGTH))
-    model.add(encoder_top_layer)
-    model.add(Dropout(dropout))
-    model.add(LSTM(HIDDEN_LAYER_DIMENSION,return_sequences=False))
-    model.add(RepeatVector(ANSWER_MAX_TOKEN_LENGTH))
-    model.add(decoder_top_layer)
-    model.add(Dropout(dropout))
-    model.add(LSTM(HIDDEN_LAYER_DIMENSION,return_sequences=True))
-    model.add(Dropout(dropout))
-    model.add(TimeDistributed(Dense(token_dict_size)))
-    model.add(Activation('softmax'))
-
-    model.compile(loss='categorical_crossentropy',optimizer='rmsprop',metrics=['accuracy'])
-    
-    #if os.path.isfile(NN_MODEL_PATH):
-    #    model.load_weights(NN_MODEL_PATH)
-
-
-    return model
-
 
 '''
     train nn model
