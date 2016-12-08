@@ -61,7 +61,7 @@ def get_tokens_voc(tokenized_sentences):
             token_counter.update([token])
     
     token_voc = [token for token, _ in token_counter.most_common()[:VOCAB_MAX_SIZE]]
-    print token_voc
+    #print token_voc
     token_voc.append(EMPTY_SYMBOL)
     return set(token_voc)
 
@@ -138,6 +138,8 @@ def _batch(tokenized_sentences,batch_size=1000):
 def get_training_batch(w2v_model,tokenized_sentences,token_to_index):
 
     token_voc_size = len(token_to_index)
+
+    print "token_voc_size: %d" % token_voc_size
 
     X = np.zeros((SAMPLES_BATCH_SIZE,INPUT_SEQUENCE_LENGTH,TOKEN_REPRESENTATION_SIZE))
     Y = np.zeros((SAMPLES_BATCH_SIZE,ANSWER_MAX_TOKEN_LENGTH,token_voc_size))
