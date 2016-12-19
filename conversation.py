@@ -66,7 +66,8 @@ def train_model(nn_model,w2v_model,x_tokenized_sentences,x_index_to_token,y_toke
     start_pos = 0;
     
     for full_data_pass_num in xrange(1,FULL_LEARN_ITER_NUM+1):
-        
+
+         print 'iteration %d' % full_data_pass_num
          x_train,y_train = get_training_batch(w2v_model,x_tokenized_sentences,y_tokenized_sentences,token_to_index,start_pos)
          start_pos = start_pos + SAMPLES_BATCH_SIZE
         #for x_train,y_train in get_training_batch(w2v_model,tokenized_sentences,token_to_index):
